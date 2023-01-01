@@ -11,12 +11,13 @@ const credenciales = {
 
   const pool = new Pool(credenciales)
 
-  const addPost = async(titulo, img, descripcion) => {
+  const addPost = async(titulo, img, description) => {
     const consulta = "INSERT INTO posts VALUES (DEFAULT, $1, $2, $3)RETURNING *";
-    const values = [titulo, img, descripcion]
+    const values = [titulo, img, description]
     const result = await pool.query(consulta, values)
     console.log("post agregado")
   }
+
 
   const getPost = async() => {
     const {rows} = await pool.query("SELECT * FROM posts")
