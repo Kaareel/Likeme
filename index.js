@@ -18,26 +18,24 @@ app.get('/', (req, res) => {
 app.get('/posts', async (req, res) => {
     try {
         const posts = await getPost()
-        console.log(posts)
         const fixPost = posts.map((p) => ({
             id: p.id,
             titulo: p.titulo,
-            img: p.img,
-            description: p.description
+            img: p.url,
+            description: p.descripcion
         }))
         res.json(fixPost)
     }
     catch (error) {
-        console.log(error)
         res.json({ message: 'post no encontrado' })
     }
 });
 
 app.post('/posts', async (req, res) => {
     try {
-        const { titulo, img, description, likes } = req.body
+        const { titulo, url, descripcion, likes } = req.body
         console.log(req.body)
-        await addPost(titulo, img, description, likes)
+        await addPost(titulo, url, descripcion, likes)
         res.send('se agrego correctamente el post')
     }
     catch (error) {

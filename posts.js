@@ -11,17 +11,15 @@ const credenciales = {
 
   const pool = new Pool(credenciales)
 
-  const addPost = async(titulo, img, description) => {
+  const addPost = async(titulo, url, descripcion) => {
     const consulta = "INSERT INTO posts VALUES (DEFAULT, $1, $2, $3)RETURNING *";
-    const values = [titulo, img, description]
+    const values = [titulo, url, descripcion]
     const result = await pool.query(consulta, values)
-    console.log("post agregado")
   }
 
 
   const getPost = async() => {
     const {rows} = await pool.query("SELECT * FROM posts")
-    console.log(rows)
     return rows
   }
   module.exports = {addPost, getPost}
