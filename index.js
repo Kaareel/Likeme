@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 
 const cors = require('cors')
-const { addPost, getPost } = require('./posts.js');
+const { addPost, getPost, putPost, deletePosts } = require('./posts.js');
 require("dotenv").config({ path: "./.env" });
 
 
@@ -21,8 +21,9 @@ app.get('/posts', async (req, res) => {
         const fixPost = posts.map((p) => ({
             id: p.id,
             titulo: p.titulo,
-            img: p.url,
-            description: p.descripcion
+            img: p.img,
+            descripcion: p.description,
+            likes: p.likes
         }))
         res.json(fixPost)
     }
@@ -33,12 +34,29 @@ app.get('/posts', async (req, res) => {
 
 app.post('/posts', async (req, res) => {
     try {
-        const { titulo, url, descripcion, likes } = req.body
+        const { titulo, img, descripcion, likes } = req.body
         console.log(req.body)
-        await addPost(titulo, url, descripcion, likes)
+        await addPost(titulo, img, descripcion, likes)
         res.send('se agrego correctamente el post')
     }
     catch (error) {
         res.json({ message: 'post no encontrado' })
     }
 });
+
+app.put("/posts/like/:id", async (req, res) => {
+    const { id } = req.params
+    try {
+        await putPost(id)
+        res.send("like agregado")
+    }
+    catch (error) {
+        res.json({ message: 'like no disponible' })
+    }
+    });
+
+    app.delete("/posts/:id", async (req, res) => {
+        const { id } = req.params
+        await deletePosts(id)
+        res.send("post eliminado con éxito")
+        });
