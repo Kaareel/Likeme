@@ -24,10 +24,9 @@ const credenciales = {
   }
 
   const putPost = async (id) => {
-    const consulta = "UPDATE posts SET likes = likes + 1 WHERE id = $1";
+    const consulta = "UPDATE posts SET likes = likes+1 WHERE id = $1";
     const values = [id]
     const result = await pool.query(consulta, values)
-    console.log(result)
     }
 
     const deletePosts = async (id) => {

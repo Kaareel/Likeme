@@ -23,7 +23,7 @@ app.get('/posts', async (req, res) => {
             titulo: p.titulo,
             img: p.img,
             descripcion: p.description,
-            likes: p.likes
+            likes: p.likes === 0 ? undefined : p.likes
         }))
         res.json(fixPost)
     }
@@ -34,13 +34,12 @@ app.get('/posts', async (req, res) => {
 
 app.post('/posts', async (req, res) => {
     try {
-        const { titulo, img, descripcion, likes } = req.body
-        console.log(req.body)
-        await addPost(titulo, img, descripcion, likes)
+        const { titulo, url, descripcion } = req.body
+        await addPost(titulo, url, descripcion, 0)
         res.send('se agrego correctamente el post')
     }
     catch (error) {
-        res.json({ message: 'post no encontrado' })
+        res.status(500).json({ message: 'post no encontrado' })
     }
 });
 
@@ -51,12 +50,17 @@ app.put("/posts/like/:id", async (req, res) => {
         res.send("like agregado")
     }
     catch (error) {
-        res.json({ message: 'like no disponible' })
+        res.status(500).json({ message: 'like no disponible' })
     }
-    });
+});
 
-    app.delete("/posts/:id", async (req, res) => {
+app.delete("/posts/:id", async (req, res) => {
+    try {
         const { id } = req.params
         await deletePosts(id)
         res.send("post eliminado con éxito")
+    }
+    catch(error){
+        res.status(500).json({message: 'error al eliminar'})
+    }
         });
